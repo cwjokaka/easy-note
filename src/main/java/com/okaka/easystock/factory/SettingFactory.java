@@ -1,12 +1,10 @@
-package com.okaka.easynote.factory;
+package com.okaka.easystock.factory;
 
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SearchableConfigurable;
-import com.intellij.openapi.util.NlsContexts;
-import com.okaka.easynote.Config;
-import com.okaka.easynote.ui.SettingUI;
+import com.okaka.easystock.Config;
+import com.okaka.easystock.ui.SettingUI;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,6 +13,9 @@ import java.io.File;
 import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * 插件的配置页面设置
+ */
 public class SettingFactory implements SearchableConfigurable {
 
     private final SettingUI settingUI = new SettingUI();
@@ -31,14 +32,21 @@ public class SettingFactory implements SearchableConfigurable {
 
     @Override
     public @Nullable JComponent createComponent() {
+        // 配置页面
         return settingUI.getComponent();
     }
 
+    /**
+     * 设置是否已修改
+     */
     @Override
     public boolean isModified() {
         return true;
     }
 
+    /**
+     * 点击ok或apply时触发此方法
+     */
     @Override
     public void apply() throws ConfigurationException {
         String url = settingUI.getUrlTextField().getText();

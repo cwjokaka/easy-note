@@ -1,4 +1,4 @@
-package com.okaka.easynote.ui;
+package com.okaka.easystock.ui;
 
 import javax.swing.*;
 import java.io.File;

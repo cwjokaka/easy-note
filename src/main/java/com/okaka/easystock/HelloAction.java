@@ -1,4 +1,4 @@
-package com.okaka.easynote;
+package com.okaka.easystock;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;

@@ -1,6 +1,6 @@
-package com.okaka.easynote;
+package com.okaka.easystock;
 
-import com.okaka.easynote.ui.ReadUI;
+import com.okaka.easystock.ui.ReadUI;
 
 /**
  * @author okaka
