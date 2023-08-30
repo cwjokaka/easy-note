@@ -11,6 +11,18 @@ repositories {
   mavenCentral()
 }
 
+dependencies {
+  implementation ("cn.hutool:hutool-all:5.7.16");
+  implementation ("com.alibaba:fastjson:1.2.78");
+
+//  testCompile ("junit:junit:4.12");
+
+  // lombok
+  compileOnly ("org.projectlombok:lombok:1.18.28");
+  annotationProcessor ("org.projectlombok:lombok:1.18.28");
+
+}
+
 // Configure Gradle IntelliJ Plugin
 // Read more: https://plugins.jetbrains.com/docs/intellij/tools-gradle-intellij-plugin.html
 intellij {

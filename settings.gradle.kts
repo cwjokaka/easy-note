@@ -5,4 +5,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = "easy-note"
+rootProject.name = "easy-stock"

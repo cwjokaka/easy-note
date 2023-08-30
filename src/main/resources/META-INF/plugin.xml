@@ -28,23 +28,10 @@
        Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
   <extensions defaultExtensionNs="com.intellij">
     <!-- Add your extensions here -->
-    <!-- 配置 File -> Settings -> Tools -->
-    <projectConfigurable groupId="tools" displayName="My Test Config" id="test.id"
-                         instance="com.okaka.easystock.factory.SettingFactory"/>
-
-    <!-- 窗体 (IDEA 放界面右侧) -->
-    <toolWindow id="Read-Book" secondary="false" anchor="right" icon="/META-INF/pluginIcon.svg"
-                factoryClass="com.okaka.easystock.factory.ReadFactory"/>
-
+    <!--  持久化  -->
+    <applicationService serviceImplementation="com.okaka.easystock.infrastructure.DataStorage"/>
   </extensions>
 
   <actions>
-
-    <action id="hello" class="com.okaka.easystock.HelloAction" text="Hello" description="插件尝试入门">
-      <add-to-group group-id="ToolsMenu" anchor="first"/>
-    </action>
-    <action id="Menu-Add-Mark" class="com.okaka.easystock.MenuAddMark" text="MenuAddMark" description="MenuAddMark">
-      <add-to-group group-id="GoToMenu" anchor="first"/>
-    </action>
   </actions>
 </idea-plugin>

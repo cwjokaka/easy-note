@@ -30,6 +30,9 @@ public class SettingFactory implements SearchableConfigurable {
         return "test-config";
     }
 
+    /**
+     * 创建新的Swing表单，使用户可以进行配置设置
+     */
     @Override
     public @Nullable JComponent createComponent() {
         // 配置页面
