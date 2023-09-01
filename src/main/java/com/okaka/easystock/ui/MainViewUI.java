@@ -34,21 +34,26 @@ public class MainViewUI {
     public MainViewUI() {
         // 初始化表格
         stockTable.setModel(stockTableModel);
-        // 查询股票
-        List<StockData> stockList = stockService.fetchStockDataList(DataStorage.getInstance().getStockCodes());
-        // 更新表格
-        updateStockTable(stockList);
+        // 更新股票显示
+        updateStocks(DataStorage.getInstance().getStockCodes());
         // 初始化界面事件
         initUIEventListener();
     }
 
-    public void updateStockTable(List<StockData> stockDataList) {
-        // 清空旧数据
+    public void updateStocks(List<String> stockCodes) {
+        // 查询股票
+        List<StockData> stockList = stockService.fetchStockDataList(stockCodes);
+        // 更新表格
+        updateStockTable(stockList);
+    }
+
+    private void updateStockTable(List<StockData> stockDataList) {
+        // 清空表格旧股票数据
         for (int i = 0; i < stockTableModel.getRowCount(); i++) {
             stockTableModel.removeRow(0);
         }
 
-        // 添加
+        // 添加新股票数据
         for (StockData stockData : stockDataList) {
             stockTableModel.addRow(new String[]{
                     stockData.getName(),
@@ -85,6 +90,10 @@ public class MainViewUI {
 //                }
             }
         });
+    }
+
+    public JPanel getPanel() {
+        return mainPanel;
     }
 
 }

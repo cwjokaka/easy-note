@@ -28,7 +28,17 @@
        Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
   <extensions defaultExtensionNs="com.intellij">
     <!-- Add your extensions here -->
-    <!--  持久化  -->
+    <toolWindow id="XUtil"
+                canCloseContents="true"
+                anchor="bottom"
+                factoryClass="com.okaka.easystock.factory.TabFactory"
+                icon="/icons/stock.png"
+    />
+
+<!--    <projectConfigurable groupId="tools" displayName="My Test Config" id="test.id"-->
+<!--                         instance="com.okaka.easystock.ui.ConfigUI"/>-->
+
+    <!--  注册持久化部件  -->
     <applicationService serviceImplementation="com.okaka.easystock.infrastructure.DataStorage"/>
   </extensions>
 

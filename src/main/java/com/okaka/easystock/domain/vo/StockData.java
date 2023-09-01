@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * @author okaka
@@ -38,5 +39,20 @@ public class StockData {
      * 涨幅
      */
     BigDecimal increasePer;
+
+    /**
+     * 最高价
+     */
+    BigDecimal maxPrice;
+
+    /**
+     * 最低价
+     */
+    BigDecimal minPrice;
+
+    /**
+     * 最后更新时间
+     */
+    LocalDateTime lastUpdateTime;
 
 }

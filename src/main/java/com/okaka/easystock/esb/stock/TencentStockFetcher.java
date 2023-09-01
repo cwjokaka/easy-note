@@ -1,82 +1,78 @@
 package com.okaka.easystock.esb.stock;
 
 import cn.hutool.Hutool;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import com.okaka.easystock.domain.vo.StockData;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.regex.Pattern;
 
 /**
+ * 腾讯股票抓取
  * @author okaka
  * @date 2023-08-31
  */
 @Slf4j
 public class TencentStockFetcher implements StockFetcher {
 
-    private final String URL = "http://qt.gtimg.cn/q=";
+    private static final String URL = "http://qt.gtimg.cn/q=";
 
     @Override
     public List<StockData> fetch(Collection<String> stockCodes) {
+        if (CollectionUtil.isEmpty(stockCodes)) {
+            return Collections.emptyList();
+        }
         String params = String.join(",", stockCodes);
         try (HttpResponse response = HttpRequest.get(URL + params).execute()) {
-            if (response.getStatus() == 200) {
-                String body = response.body();
-
+            if (response.getStatus() != 200) {
+                log.warn("TencentStockFetcher获取股票数据失败, 返回码:{}", response.getStatus());
+                return Collections.emptyList();
             }
+            String body = response.body();
+            return parse(body);
         } catch (Exception e) {
             log.warn(e.getMessage());
         }
+        return Collections.emptyList();
     }
 
-    private void parse(String body) {
+    private List<StockData> parse(String body) {
+        if (StringUtils.isBlank(body)) {
+            return Collections.emptyList();
+        }
         /*
         返回示例：
-        v_sh600585="1~海螺水泥~600585~25.68~26.03~25.95~156527~78158~78369~25.68~1099~25.67~1287~25.66~858~25.65~188~25.64~1356~25.69~14~25.70~200~25.72~830~25.73~195~25.74~68~~20230831155929~-0.35~-1.34~26.28~25.52~25.68/156527/404489389~156527~40449~0.39~11.07~~26.28~25.52~2.92~1027.12~1360.86~0.75~28.63~23.43~0.69~3481~25.84~10.52~8.69~~~1.36~40448.9389~0.0000~0~ ~GP-A~-0.85~-0.43~5.76~6.76~5.30~30.97~22.60~0.16~-4.89~7.22~3999702579~5299302579~57.11~-7.06~3999702579~~~-15.64~-0.08~~CNY~0~___D__F__N";
+        v_sh600585="1~海螺水泥~600585~26.46~25.68~25.80~124474~86099~38375~26.46~19~26.45~61~26.44~78~26.43~62~26.42~14~26.47~176~26.48~196~26.49~342~26.50~830~26.51~296~~20230901103533~0.78~3.04~26.50~25.80~26.46/124474/326538937~124474~32654~0.31~11.41~~26.50~25.80~2.73~1058.32~1402.20~0.77~28.25~23.11~2.00~-1606~26.23~10.84~8.95~~~1.38~32653.8937~0.0000~0~ ~GP-A~2.16~1.42~5.59~6.76~5.30~30.97~22.60~3.04~-1.08~9.61~3999702579~5299302579~-77.43~-3.15~3999702579~~~-12.15~-0.08~~CNY~0~___D__F__N";
+        v_sz002572="51~索菲亚~002572~20.25~19.04~19.50~131498~84575~46922~20.24~20~20.23~9~20.22~11~20.21~16~20.20~28~20.25~149~20.27~18~20.28~20~20.29~16~20.30~75~~20230901103530~1.21~6.36~20.42~19.42~20.25/131498/262015244~131498~26202~2.06~16.04~~20.42~19.42~5.25~129.36~184.75~3.27~20.94~17.14~3.16~-194~19.93~18.49~17.36~~~1.48~26201.5244~0.0000~0~ ~GP-A~15.95~16.78~3.44~20.40~9.00~23.10~12.76~10.05~6.86~21.84~638794338~912370038~-53.59~20.01~638794338~~~18.67~0.05~~CNY~0~";
          */
-        String[] lines = result.split("\n");
-        for (String line : lines) {
-            String code = line.substring(line.indexOf("_") + 1, line.indexOf("="));
-            String dataStr = line.substring(line.indexOf("=") + 2, line.length() - 2);
-            String[] values = dataStr.split("~");
-            StockBean bean = new StockBean(code, codeMap);
-            bean.setName(values[1]);
-            bean.setNow(values[3]);
-            bean.setChange(values[31]);
-            bean.setChangePercent(values[32]);
-            bean.setTime(values[30]);
-            bean.setMax(values[33]);//33
-            bean.setMin(values[34]);//34
-
-            BigDecimal now = new BigDecimal(values[3]);
-            String costPriceStr = bean.getCostPrise();
-            if (StringUtils.isNotEmpty(costPriceStr)) {
-                BigDecimal costPriceDec = new BigDecimal(costPriceStr);
-                BigDecimal incomeDiff = now.add(costPriceDec.negate());
-                if (costPriceDec.compareTo(BigDecimal.ZERO) <= 0) {
-                    bean.setIncomePercent("0");
-                } else {
-                    BigDecimal incomePercentDec = incomeDiff.divide(costPriceDec, 5, RoundingMode.HALF_UP)
-                            .multiply(BigDecimal.TEN)
-                            .multiply(BigDecimal.TEN)
-                            .setScale(3, RoundingMode.HALF_UP);
-                    bean.setIncomePercent(incomePercentDec.toString());
-                }
-
-                String bondStr = bean.getBonds();
-                if (StringUtils.isNotEmpty(bondStr)) {
-                    BigDecimal bondDec = new BigDecimal(bondStr);
-                    BigDecimal incomeDec = incomeDiff.multiply(bondDec)
-                            .setScale(2, RoundingMode.HALF_UP);
-                    bean.setIncome(incomeDec.toString());
-                }
-            }
-
-            updateData(bean);
+        System.out.println(body);
+        String[] stockStrings = body.split(";");
+        List<StockData> result = new ArrayList<>();
+        for (String stockString : stockStrings) {
+            String stockCode = stockString.substring(stockString.indexOf("_") + 1, stockString.indexOf("="));
+            String dataStr = stockString.substring(stockString.indexOf("=") + 2, stockString.length() - 2);
+            String[] dataList = dataStr.split("~");
+            StockData stockData = new StockData();
+            stockData.setCode(stockCode);
+            stockData.setName(dataList[1]);
+            stockData.setCurrentPrice(new BigDecimal(dataList[3]));
+            stockData.setIncrease(new BigDecimal(dataList[31]));
+            stockData.setIncreasePer(new BigDecimal(dataList[32]));
+            stockData.setLastUpdateTime(LocalDateTime.parse(dataList[30], DateTimeFormatter.ofPattern("yyyyMMddHHmmss")));
+            stockData.setMaxPrice(new BigDecimal(dataList[33]));
+            stockData.setMinPrice(new BigDecimal(dataList[34]));
+            result.add(stockData);
         }
+        return result;
     }
 
 }

@@ -1,16 +1,15 @@
 package com.okaka.easystock.infrastructure;
 
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.components.*;
+import com.intellij.testFramework.ApplicationExtension;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 /**
- * 持久化数据
+ * 持久化组件
  * @author okaka
  * @date 2023-08-30
  */
@@ -20,7 +19,7 @@ public class DataStorage implements PersistentStateComponent<DataState> {
     private DataState state = new DataState();
 
     public static DataStorage getInstance() {
-        return ServiceManager.getService(DataStorage.class);
+        return ApplicationManager.getApplication().getService(DataStorage.class);
     }
 
     @Nullable
