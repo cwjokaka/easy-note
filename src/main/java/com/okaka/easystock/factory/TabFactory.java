@@ -9,6 +9,7 @@ import com.okaka.easystock.component.ViewBars;
 import org.jetbrains.annotations.NotNull;
 
 /**
+ * 工具栏窗体工厂
  * @author okaka
  * @date 2023-09-01
  */

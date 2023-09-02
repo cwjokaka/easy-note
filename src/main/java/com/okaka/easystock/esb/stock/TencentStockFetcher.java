@@ -58,6 +58,9 @@ public class TencentStockFetcher implements StockFetcher {
         String[] stockStrings = body.split(";");
         List<StockData> result = new ArrayList<>();
         for (String stockString : stockStrings) {
+            if (StringUtils.isBlank(stockString)) {
+                continue;
+            }
             String stockCode = stockString.substring(stockString.indexOf("_") + 1, stockString.indexOf("="));
             String dataStr = stockString.substring(stockString.indexOf("=") + 2, stockString.length() - 2);
             String[] dataList = dataStr.split("~");
@@ -72,6 +75,7 @@ public class TencentStockFetcher implements StockFetcher {
             stockData.setMinPrice(new BigDecimal(dataList[34]));
             result.add(stockData);
         }
+        System.out.printf("result:" + result);
         return result;
     }
 

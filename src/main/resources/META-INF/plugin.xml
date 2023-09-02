@@ -35,7 +35,14 @@
                 icon="/icons/stock.png"
     />
 
-<!--    <projectConfigurable groupId="tools" displayName="My Test Config" id="test.id"-->
+    <applicationConfigurable parentId="tools"
+                             instance="com.okaka.easystock.ui.ConfigUI"
+                             id="Setting"
+                             displayName="EasyStock"/>
+
+<!--    <projectConfigurable groupId="tools"-->
+<!--                         displayName="EasyStock"-->
+<!--                         id="org.intellij.sdk.settings.AppSettingsConfigurable"-->
 <!--                         instance="com.okaka.easystock.ui.ConfigUI"/>-->
 
     <!--  注册持久化部件  -->

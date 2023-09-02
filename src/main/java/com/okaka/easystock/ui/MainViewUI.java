@@ -26,6 +26,12 @@ public class MainViewUI {
     // 查询数据服务
     private final StockService stockService = new StockServiceImpl();
 
+    private static final MainViewUI INSTANCE = new MainViewUI();
+
+    public static MainViewUI getInstance(){
+        return INSTANCE;
+    }
+
     private final DefaultTableModel stockTableModel = new DefaultTableModel(
             new Object[][]{},
             new String[]{"股票", "代码", "最新", "涨跌", "涨幅"}

@@ -24,7 +24,6 @@ public class StockServiceImpl implements StockService {
 
     @Override
     public List<StockData> fetchStockDataList(Collection<String> stockCodes) {
-        log.info("开始查询股票信息...代码:{}", stockCodes);
         System.out.println("开始查询股票信息...代码:" + stockCodes.toString());
         return stockFetcher.fetch(stockCodes);
     }
