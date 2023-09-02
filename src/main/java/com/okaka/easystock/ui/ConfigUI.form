@@ -32,9 +32,11 @@
           </component>
         </children>
       </grid>
-      <grid id="bb3e5" binding="stockCodePanel" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+      <grid id="bb3e5" binding="stockCodePanel" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="0">
         <constraints border-constraint="Center"/>
-        <properties/>
+        <properties>
+          <alignmentY value="0.5"/>
+        </properties>
         <border type="none"/>
         <children>
           <component id="83e8b" class="javax.swing.JTextField" binding="stockCodeTextField">

@@ -118,9 +118,11 @@ public class ConfigUI implements Configurable {
             if (e.getKeyCode() == KeyEvent.VK_SPACE) {
                 System.out.println("add JTextField");
                 stockCodePanel.add(new JTextField());
+                Component[] components = stockCodePanel.getComponents();
                 System.out.println("add JTextField finish!");
                 stockCodePanel.revalidate();
                 stockCodePanel.repaint();
+
 
             }
         }

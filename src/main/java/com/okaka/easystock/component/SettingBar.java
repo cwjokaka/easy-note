@@ -6,6 +6,7 @@ import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.DumbAwareAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.IconLoader;
+import com.intellij.util.ReflectionUtil;
 import com.okaka.easystock.ui.ConfigUI;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,7 +19,7 @@ public class SettingBar extends DumbAwareAction {
     private ViewBars panel;
 
     public SettingBar(ViewBars panel) {
-        super("配置股票", "Click to setting", IconLoader.getIcon("/icons/config.svg", ClassLoader.getSystemClassLoader()));
+        super("配置股票", "Click to setting", IconLoader.getIcon("/icons/config.svg", ReflectionUtil.getGrandCallerClass().getClassLoader()));
         this.panel = panel;
     }
 
